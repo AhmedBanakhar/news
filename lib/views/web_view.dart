@@ -4,62 +4,48 @@ import 'package:news_app/widget/web_title.dart';
 
 class WebView extends StatelessWidget {
   const WebView({super.key, required this.article});
+
   final ArticleModel article;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7FA),
       appBar: AppBar(
         centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black87,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: const [
-            Text('Web'),
-            Text('News', style: TextStyle(color: Colors.orange)),
-          ],
+        leadingWidth: 64,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 14),
+          child: IconButton.filledTonal(
+            tooltip: 'Back',
+            onPressed: () => Navigator.of(context).maybePop(),
+            style: IconButton.styleFrom(
+              backgroundColor: const Color(0xFFECE7DC),
+              foregroundColor: const Color(0xFF172421),
+            ),
+            icon: const Icon(Icons.arrow_back_rounded, size: 19),
+          ),
+        ),
+        title: const Text(
+          'THE DAILY EDITION',
+          style: TextStyle(
+            fontSize: 11,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(height: 1, color: const Color(0xFFE8E2D7)),
         ),
       ),
-      /**
-       * * SafeArea is used to avoid any potential overlap with system UI elements, ensuring that the content is displayed correctly on all devices. The padding around the content provides a clean and professional look, enhancing readability and user experience.
-       * * SingleChildScrollView allows the content to be scrollable, which is essential for displaying articles that may have varying lengths. The BouncingScrollPhysics adds a nice touch to the scrolling behavior, giving it a more natural feel, especially on iOS devices.
-       */
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.fromLTRB(20, 18, 20, 32),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 4,
-                  width: 90,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  'Article detail',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Read the full story below with clean spacing and professional layout.',
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black54,
-                    height: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 25),
-                WebTitle(article: article),
-              ],
+              children: [WebTitle(article: article)],
             ),
           ),
         ),

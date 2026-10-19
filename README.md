@@ -2,6 +2,19 @@
 
 A new Flutter project.
 
+## Offline news
+
+News requests go through `CachedNewsRepository`. Successful responses are saved
+in a local SQLite database using `SqfliteNewsCache`, keyed by category and
+search query.
+When a request fails because the network is unavailable, the app displays the
+saved results for that same category and query. Results are available offline
+after they have first been loaded while online. Article titles and descriptions
+remain available offline; remote images use a local placeholder when they
+cannot be loaded.
+The cache uses native SQLite on Android, iOS, and macOS, and SQLite FFI on
+Windows and Linux. The current database setup does not support web builds.
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

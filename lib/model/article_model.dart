@@ -9,11 +9,19 @@ class ArticleModel {
     required this.urlToImage,
   });
 
-  factory ArticleModel.fromJson(json) {
+  factory ArticleModel.fromJson(Map<String, dynamic> json) {
     return ArticleModel(
       urlToImage: json['urlToImage'],
       title: json['title'],
       description: json['description'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+      'urlToImage': urlToImage,
+    };
   }
 }

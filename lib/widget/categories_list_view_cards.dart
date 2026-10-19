@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/model/category_model.dart';
+import 'package:news_app/repositories/news_repository.dart';
 import 'package:news_app/widget/category_cards.dart';
 
 class CategoriesListViewCards extends StatelessWidget {
-  const CategoriesListViewCards({super.key});
+  const CategoriesListViewCards({super.key, required this.repository});
+
+  final NewsRepository repository;
 
   final List<CategoryModel> categories = const [
     CategoryModel(categoryName: "Business", imageUrl: "images/business.jpeg"),
@@ -22,9 +25,9 @@ class CategoriesListViewCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 120,
+      height: 142,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,
         /**
@@ -34,7 +37,10 @@ class CategoriesListViewCards extends StatelessWidget {
          *          */
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
-          return CategoryCards(category: categories[index]);
+          return CategoryCards(
+            category: categories[index],
+            repository: repository,
+          );
         },
       ),
     );

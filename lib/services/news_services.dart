@@ -1,36 +1,38 @@
 import 'package:dio/dio.dart';
 import 'package:news_app/model/article_model.dart';
 
-class NewsServices {
+abstract interface class NewsRemoteDataSource {
+  Future<List<ArticleModel>> getNews({required String category, String? query});
+}
+
+class NewsServices implements NewsRemoteDataSource {
   final Dio dio;
   NewsServices(this.dio);
 
+  @override
   Future<List<ArticleModel>> getNews({
     required String category,
     String? query,
   }) async {
-    try {
-      final queryParameters = {
-        'apiKey': '93ca029262b94195a895693953801e5c',
-        'country': 'us',
-        'category': category,
-        if (query != null && query.trim().isNotEmpty) 'q': query.trim(),
-      };
+    final queryParameters = {
+      'apiKey': '93ca029262b94195a895693953801e5c',
+      'country': 'us',
+      'category': category.trim().toLowerCase(),
+      if (query != null && query.trim().isNotEmpty) 'q': query.trim(),
+    };
 
-      final response = await dio.get(
-        'https://newsapi.org/v2/top-headlines',
-        queryParameters: queryParameters,
-      );
+    final response = await dio.get(
+      'https://newsapi.org/v2/top-headlines',
+      queryParameters: queryParameters,
+    );
 
-      final Map<String, dynamic> jsonData = response.data;
-      final List<dynamic> articles = jsonData['articles'];
-      final List<ArticleModel> articlesList = [];
-      for (var article in articles) {
-        articlesList.add(ArticleModel.fromJson(article));
-      }
-      return articlesList;
-    } catch (e) {
-      return [];
-    }
+    final jsonData = response.data as Map<String, dynamic>;
+    final articles = jsonData['articles'] as List<dynamic>;
+    return articles
+        .map(
+          (article) =>
+              ArticleModel.fromJson(Map<String, dynamic>.from(article as Map)),
+        )
+        .toList();
   }
 }
